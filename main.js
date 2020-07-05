@@ -40,17 +40,46 @@ function playRound(playerSelection, computerSelection) {
     }
     return gameResult;
 }
-function game(){
-
-    console.groupCollapsed("Results");
-    for(let i=0; i<5; i++){
-        const playerSelection = prompt("Select your hand rock paper or scissors.");
-        const computerSelection = computerPlay();
-        console.info("computer selection is " + computerSelection);
-        let result=playRound(playerSelection, computerSelection);
-        document.getElementsByClassName("result")[i].innerHTML=result;
-        console.log(result);
+function game(playerSelection){
+    let computerSelection=computerPlay();
+    result=playRound(playerSelection,computerSelection)+`[Computer Selection:${computerSelection}]`;
+    let liElement=document.createElement("li");
+    liElement.textContent=result;
+    if(result.startsWith("You Win")){
+        liElement.style.color="green";
+        let winSum=document.querySelector(".res-sum:nth-child(1) > span:nth-child(2)").textContent;
+        document.querySelector(".res-sum:nth-child(1) > span:nth-child(2)").textContent=parseInt(winSum)+1;
     }
-    console.groupEnd("Results");
+    else if(result.startsWith("You Lose")){
+        liElement.style.color="red";
+        let loseSum=document.querySelector(".res-sum:nth-child(2) > span:nth-child(2)").textContent;
+        document.querySelector(".res-sum:nth-child(2) > span:nth-child(2)").textContent=parseInt(loseSum)+1;
+    }else{
+        let drawSum=document.querySelector(".res-sum:nth-child(3) > span:nth-child(2)").textContent;
+        document.querySelector(".res-sum:nth-child(3) > span:nth-child(2)").textContent=parseInt(drawSum)+1;
+    }
+    document.querySelector('#results > ol').appendChild(liElement);
 }
-game()
+
+let rockBtn=document.querySelector("#rock");
+let paperBtn=document.querySelector("#paper");
+let scissorsBtn=document.querySelector("#scissors");
+
+rockBtn.addEventListener("click", function(e){
+    e.target.style.background="blue";
+    paperBtn.style.background="#555555";
+    scissorsBtn.style.background="#555555";
+    game("rock");
+})
+scissorsBtn.addEventListener("click", function(e){
+    e.target.style.background="blue";
+    paperBtn.style.background="#555555";
+    rockBtn.style.background="#555555";
+    game("scissors");
+})
+paperBtn.addEventListener("click", function(e){
+    e.target.style.background="blue";
+    rockBtn.style.background="#555555";
+    scissorsBtn.style.background="#555555";
+    game("paper");
+})
